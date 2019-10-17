@@ -1,0 +1,14 @@
+{
+    "values": {
+        "components": "Components",
+        "menu": "Menu",
+        "profile": "Profile",
+        "documentation": "Documentation",
+        "application.title": "Single Page Application",
+
+        "sb.home": "Home",
+        "sb.projects": "Projects",
+        "sb.api": "API doc",
+        "sb.about": "About"
+    }
+}

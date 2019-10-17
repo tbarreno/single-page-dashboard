@@ -1,0 +1,19 @@
+<%
+//
+// Application skeleton template
+//
+
+// Prepare the page structure (create the IDs)
+app.ids.main_wrapper = app.common.newId("main-wrapper");
+app.ids.main_sidebar = app.common.newId("main-sidebar");
+app.ids.main_panel = app.common.newId("main-panel");
+app.ids.main_navbar = app.common.newId("main-navbar");
+app.ids.main_content = app.common.newId("main-content");
+%>
+<div id="<%= app.ids.main_wrapper %>" class="wrapper">
+    <div id="<%= app.ids.main_sidebar %>"></div>
+    <div id="<%= app.ids.main_panel %>" class="main-panel">
+        <nav id="<%= app.ids.main_navbar %>"></nav>
+        <div id="<%= app.ids.main_content %>"></div>
+    </div>
+</div>

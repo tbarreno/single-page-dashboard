@@ -1,0 +1,34 @@
+<div id="<%= app.ids.main_sidebar %>" class="sidebar" data-color="azure" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+  <div class="logo">
+    <a href="<%= app.info.link %>" class="simple-text logo-normal">
+      <%= app.info.name %>
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      <%
+      let active_item = "active";
+      app.info.sidebar.forEach( function(item) {
+
+        // Set the 'li' ID for setting the active section/entry
+        item.li_id = "nav-li-" + item.id; 
+      %>
+      <li class="nav-item <%= active_item %>" id="<%= item.li_id %>">
+        <a class="nav-link" data-action="<%= item.action %>" href="<%= item.id %>">
+          <i class="material-icons"><%= item.icon %></i>
+          <p><%= i18n(item.text); %></p>
+        </a>
+      </li>        
+      <%
+        active_item = "";
+      });
+      %>
+      <li class="nav-item active-pro ">
+        <a class="nav-link" href="./upgrade.html">
+          <i class="material-icons">unarchive</i>
+          <p>Upgrade to PRO</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
