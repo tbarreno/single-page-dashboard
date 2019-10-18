@@ -5,10 +5,10 @@
   "main": "app.js",
   "private": true,
   "scripts": {
-    "test": "node app.js"
+    "start": "node app.js"
   },
   "author": "Tinguaro Barreno",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",

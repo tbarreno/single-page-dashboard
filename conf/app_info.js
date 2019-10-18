@@ -82,7 +82,7 @@ module.exports = {
             }]
         },
 
-        // Sidebar menu (default: not customized)
+        // Sidebar menu (default one: for unauthenticated users)
         sidebar: [{
             id: "home",
             icon: "home",

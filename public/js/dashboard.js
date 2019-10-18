@@ -85,18 +85,16 @@ let dashboard = (function () {
 
             $("#" + app.ids.main_sidebar).replaceWith(ejs.render(template, data));
 
-            // Ready: now setup the bindings
+            // Ready: now setup the bindings for the sidebar links
             $("a.nav-link").on("click", function (event) {
+
+                // Ignore the default click
                 event.preventDefault();
 
+                // Get the 'data-action' parameter and launch it
                 if (event.currentTarget) {
                     let action_id = event.currentTarget.dataset["action"];
-
                     pub.doAction(action_id);
-
-                    // Selects the section in the sidebar
-                    // $("#" + app.ids.main_sidebar + " li.nav-item.active").removeClass("active");
-                    // $("#" + event.currentTarget.id).addClass("active");
                 }
             });
         });
@@ -163,7 +161,7 @@ let dashboard = (function () {
     }
 
     /**
-     * Selects a section (menu entry) in the Sidebar.
+     * Selects a menu entry in the Sidebar.
      * 
      * @param {string} entry_id The menu entry ID.
      */
@@ -171,7 +169,7 @@ let dashboard = (function () {
 
         let li_id = undefined;
 
-        // First, let's look for the sidebar entry and get its "link_id"
+        // First, let's look for the sidebar entry and get its "li_id"
         app.info.sidebar.forEach(sidebar_entry => {
             if (sidebar_entry.id === entry_id) {
                 li_id = sidebar_entry.li_id;
@@ -179,7 +177,6 @@ let dashboard = (function () {
         });
 
         // Found
-        console.log("li_id : ", li_id);
         if (li_id) {
             $("#" + app.ids.main_sidebar + " li.nav-item.active").removeClass("active");
             $("#" + li_id).addClass("active");
