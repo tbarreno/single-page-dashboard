@@ -20,8 +20,9 @@ module.exports = {
         // These libraries are loaded before the startup (one of them
         // must define the 'app.start()' function)
         libs: [
+            "js/common.js",
             "js/dashboard.js",
-            "js/common.js"
+            "js/sidebar.js"
         ],
 
         // I18N : a map with the language key and the traduction file
@@ -47,62 +48,39 @@ module.exports = {
             about: "about.html"
         },
 
-        // Global actions that the Dashboard should take care
-        actions: {
-            // Each action has a list of "things to do"
-            // For example: load a template and select it section on the sidebar
-            load_home: [{
-                action: "load_template",
-                template: "home"
-                // Optional data = {} for the rendering
-            }, {
-                action: "update_sidebar",
-                select_section: "home"
-            }],
-            load_projects: [{
-                action: "load_template",
-                template: "projects"
-            }, {
-                action: "update_sidebar",
-                select_section: "projects"
-            }],
-            load_api: [{
-                action: "load_template",
-                template: "api"
-            }, {
-                action: "update_sidebar",
-                select_section: "api"
-            }],
-            load_about: [{
-                action: "load_template",
-                template: "about"
-            }, {
-                action: "update_sidebar",
-                select_section: "about"
-            }]
-        },
-
         // Sidebar menu (default one: for unauthenticated users)
         sidebar: [{
             id: "home",
             icon: "home",
             text: "sb.home",
-            action: "load_home"
+            data: {
+                action: "load_template",
+                template: "home"
+            }
         }, {
             id: "projects",
             icon: "work",
             text: "sb.projects",
-            action: "load_projects"
+            data: {
+                action: "load_template",
+                template: "projects"
+            }
         }, {
             id: "api",
             icon: "library_books",
             text: "sb.api",
-            action: "load_api"
+            data: {
+                action: "load_template",
+                template: "api"
+            }
         }, {
             id: "about",
             icon: "help",
             text: "sb.about",
-            action: "load_about"
+            data: {
+                action: "load_template",
+                template: "about"
+            }
         }],
     },
 

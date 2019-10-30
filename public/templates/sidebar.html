@@ -12,9 +12,17 @@
 
         // Set the 'li' ID for setting the active section/entry
         item.li_id = "nav-li-" + item.id; 
+
+        // Add the extra data to the link
+        let data_attrs = "";
+        if( typeof item.data === "object" ) {
+          Object.getOwnPropertyNames(item.data).forEach( function(key) {
+            data_attrs += " data-" + key + "=" + item.data[key];
+          });
+        } 
       %>
       <li class="nav-item <%= active_item %>" id="<%= item.li_id %>">
-        <a class="nav-link" data-action="<%= item.action %>" href="<%= item.id %>">
+        <a class="nav-link" <%= data_attrs %> href="<%= item.id %>">
           <i class="material-icons"><%= item.icon %></i>
           <p><%= i18n(item.text); %></p>
         </a>
