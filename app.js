@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 
 // Application modules (services)
 app.use("/app", appinfo_route);
-app.use("/api/projects", projects_route);
+app.use("/apiv1/projects", projects_route);
 
 // Static content
 app.use(express.static(path.join(__dirname, 'public')));

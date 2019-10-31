@@ -33,6 +33,9 @@ var app = (function () {
         // Session info (user data, auth token, etc.)
         app.session = {};
 
+        // API Clients (modules)
+        app.clients = {};
+
         // Get the global application information (configuration)
         // TODO: log something when the info service is not available
         $.getJSON("/app/info", setupApplication);
@@ -51,10 +54,9 @@ var app = (function () {
         // Setup the language settings
         setupLanguage();
 
-        // Load the dashboard and runs it. Then loads
-        // the additional scripts.
-        if (app.info.libs) {
-            pub.loadScript(app.info.libs, function () { app.start(); });
+        // Load the dashboard modules and run them. Then, start the application.
+        if (app.info.modules) {
+            pub.loadScript(app.info.modules, function () { app.start(); });
         }
     }
 
@@ -100,7 +102,7 @@ var app = (function () {
         if (typeof scripts === "string") {
 
             // Just one script
-            get_promises.push($.getScript(script));
+            get_promises.push($.getScript(scripts));
 
         } else if (Array.isArray(scripts)) {
 
@@ -112,8 +114,102 @@ var app = (function () {
 
         // When all scripts are loaded...
         $.when(...get_promises).done(function () {
-            callback();
+            if (typeof callback === "function") {
+                callback();
+            }
         });
+    }
+
+    /**
+     * Gets an API module client by name and version.
+     * 
+     * @param {string} api_name The API client module name as stated in the 'api_info' configuration.
+     * @param {function} callback The callback function to run after the API client module is loaded.
+     * @param {function} error_callback The callback function if the API client is not found.
+     */
+    pub.getApiClient = function (api_name, api_version, callback, error_callback) {
+
+        // Look for the API name and version in the 'app_info' configuration
+        let api_lookup = app.info.apis.filter((api) => {
+            return api.name === api_name && api.version === api_version;
+        });
+
+        if (api_lookup.length == 0) {
+            // No such API in the definition...
+            console.log("Warning: API client for '" + api_name + ":" + api_version + "' not found.");
+            if (typeof error_callback === "function") {
+                error_callback();
+            }
+        } else if (api_lookup.length > 1) {
+            // ups... more than one api match...
+            // Let's show a warning and just take the first one
+            console.log("Warning: more than one API client for '" + api_name + ":" + api_version + "'.");
+        }
+
+        // Get the first restult
+        let api_definition = api_lookup[0];
+
+        // Check for the client module
+        if (api_definition.hasOwnProperty("client")) {
+            // Already loaded
+            if (typeof callback === "function") {
+                callback(api_definition.client);
+            }
+        } else {
+            // Load the script and runs the callback
+            let api_script = api_definition.script;
+
+            pub.loadScript(api_script, () => {
+                if (typeof callback === "function") {
+                    callback(api_definition.client);
+                }    
+            });
+        }
+    }
+
+    /**
+     * Registers an API client.
+     * 
+     * API client modules must provide a 'supported_apis' array with the list of
+     * APIs and versions that the module supports.
+     * 
+     * This method stores the module under the 'app.info.apis' structure as the
+     * 'client' property.
+     * 
+     * @param {object} api_client The client module.
+     */
+    pub.registerApiClient = function (api_client) {
+
+        // Check for the 'supported_apis' array
+        if (Array.isArray(api_client.supported_apis)) {
+            api_client.supported_apis.forEach((supported_api) => {
+
+                // Look for the API name and version in the 'app_info' configuration
+                let api_lookup = app.info.apis.filter((api) => {
+                    // Just one version
+                    if (typeof supported_api.version === "string") {
+                        return api.name === supported_api.name && api.version === supported_api.version;
+                    } else if (Array.isArray(supported_api.versions)) {
+                        // A list of versions (do a 'find')
+                        return api.name === supported_api.name &&
+                            (supported_api.versions.find((version) => { return version === api.version }));
+                    }
+                });
+
+                if (api_lookup.length == 0) {
+                    // Not found... it may be ok anyway...
+                } else {
+                    // Set the 'client' property
+                    let api_definition = api_lookup[0];
+                    api_definition.client = api_client;
+
+                    // Initialize the client (optional)
+                    if (typeof api_client.init === "function") {
+                        api_client.init(api_definition);
+                    }
+                }
+            });
+        }
     }
 
     /**

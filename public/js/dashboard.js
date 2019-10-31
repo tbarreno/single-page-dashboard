@@ -29,7 +29,6 @@ let dashboard = (function () {
 
         // Render the page
         renderDashboard();
-
     }
 
     /**

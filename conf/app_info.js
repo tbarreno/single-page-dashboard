@@ -1,5 +1,7 @@
 /**
  * Application configuration.
+ * 
+ * This module defines the environment independent configuration.
  */
 
 module.exports = {
@@ -19,7 +21,7 @@ module.exports = {
         // Application functions/libraries/modules
         // These libraries are loaded before the startup (one of them
         // must define the 'app.start()' function)
-        libs: [
+        modules: [
             "js/common.js",
             "js/dashboard.js",
             "js/sidebar.js"
@@ -82,18 +84,15 @@ module.exports = {
                 template: "about"
             }
         }],
-    },
 
-    // APIs provided (versions, clients and endpoints)
-    apis: [
-        {
-            name: "execution-api",
-            version: "1.0",
-            base: "/apiv1",
-            client: "nepoc-1.0.js",
-            endpoints: {
-                users: "/users"
+        // APIs provided (versions, clients and endpoints)
+        apis: [
+            {
+                name: "projects-api",
+                version: "1.0",
+                base: "/apiv1",
+                script: "js/api/projects-1.0.js"
             }
-        }
-    ]
+        ]
+    }
 };
